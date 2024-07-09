@@ -77,13 +77,13 @@ const Dashboard = () => {
   }, [])
 
   const getData = () => {
-    axios.get('https://box-cricket-api.onrender.com/boxbyowner', {
+    axios.get('http://localhost:3000/boxbyowner', {
       headers: {
         auth: token
       }
     })
       .then((res) => {
-        // console.log(res.data.data[0].opning);
+        console.log(res.data.data);
         setBox(res.data.data)
       })
       .catch((err) => {
@@ -100,7 +100,7 @@ const Dashboard = () => {
   })
   const handleDelete = (id) => {
     // console.log(id);
-    axios.delete(`https://box-cricket-api.onrender.com/deletebox/${id}`)
+    axios.delete(`http://localhost:3000/deletebox/${id}`)
       .then((res) => {
         // console.log(res);
         getData()
@@ -216,7 +216,7 @@ const Dashboard = () => {
                                 formValues.append("country", values.country)
                                 formValues.append("morningPrice", values.morningPrice)
                                 formValues.append("nightPrice", values.nightPrice)
-                                axios.put(`https://box-cricket-api.onrender.com/updatebox/${id}`, formValues, {
+                                axios.put(`http://localhost:3000/updatebox/${id}`, formValues, {
                                   headers: {
                                     auth: token,
                                     "Content-Type": "multipart/form-data"

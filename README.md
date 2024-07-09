@@ -14,7 +14,7 @@ Install packages
 
 Runs the app in the development mode.\
 
-Open [https://box-cricket-api.onrender.com](https://box-cricket-api.onrender.com) to view it in your browser.
+Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
 
 The page will reload when you make changes.\
 You may also see any lint errors in the console.

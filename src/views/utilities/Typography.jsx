@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import MainCard from 'ui-component/cards/MainCard';
 import SecondaryAction from 'ui-component/cards/CardSecondaryAction';
 import { Formik, FieldArray } from 'formik';
@@ -6,12 +7,25 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { Button, FormControl, FormHelperText, InputLabel, OutlinedInput, IconButton, Grid } from '@mui/material';
 import { Box } from '@mui/system';
 import axios from 'axios';
+import Snackbar from '@mui/material/Snackbar';
 
 // import { Token } from '@mui/icons-material';
 // ==============================|| TYPOGRAPHY ||============================== //
 
 const Typography = () => {
-  var token = localStorage.getItem('auth')
+  const token = localStorage.getItem('auth');
+  const [error, setError] = useState(null);
+  const [snackbarOpen, setSnackbarOpen] = useState(false);
+  const [state, setState] = useState({
+    vertical: 'top',
+    horizontal: 'right',
+  });
+  const { vertical, horizontal } = state;
+
+  const handleClose = () => {
+    setSnackbarOpen(false);
+  };
+
   return (
     <MainCard title="Add Your Box" secondary={<SecondaryAction />}>
       <h1>My Form</h1>
@@ -23,45 +37,50 @@ const Typography = () => {
           street: '',
           city: '',
           state: '',
-          area : '',
+          area: '',
           pinCode: '',
           country: '',
-          morningPrice:'',
-          nightPrice :''
+          morningPrice: '',
+          nightPrice: ''
         }}
         onSubmit={(values, { resetForm }) => {
-          console.log(values);
+          // console.log(values);
 
-          let formValues = new FormData()
-          formValues.append("boxName", values.boxName)
-           for (let i = 0; i < values.images.length; i++) {
+          let formValues = new FormData();
+          formValues.append("boxName", values.boxName);
+          for (let i = 0; i < values.images.length; i++) {
             formValues.append('images', values.images[i]);
           }
-          formValues.append("contact", values.contact)
-          formValues.append("street", values.street)
-          formValues.append("city", values.city)
-          formValues.append("state", values.state)
-          formValues.append("area", values.area)
-          formValues.append("pinCode", values.pinCode)
-          formValues.append("country", values.country)
-          formValues.append("morningPrice", values.morningPrice)
-          formValues.append("nightPrice", values.nightPrice)
-          axios.post('https://box-cricket-api.onrender.com/addbox', formValues, {
+          formValues.append("contact", values.contact);
+          formValues.append("street", values.street);
+          formValues.append("city", values.city);
+          formValues.append("state", values.state);
+          formValues.append("area", values.area);
+          formValues.append("pinCode", values.pinCode);
+          formValues.append("country", values.country);
+          formValues.append("morningPrice", values.morningPrice);
+          formValues.append("nightPrice", values.nightPrice);
+          
+          axios.post('http://localhost:3000/addbox', formValues, {
             headers: {
               auth: token,
               "Content-Type": "multipart/form-data"
             }
           })
             .then((res) => {
-              console.log(res);
-              resetForm()
+              // console.log(res);
+              resetForm();
+              setError(null); // Clear the error if submission is successful
+              setSnackbarOpen(true); // Show success message
             })
             .catch((err) => {
-              console.log(err);
-            })
+              // console.log(err.response.data, "Error");
+              setError(err.response.data.message);
+              setSnackbarOpen(true); // Open Snackbar on error
+            });
         }}
       >
-        {({ errors, values, touched, setFieldValue,handleBlur, handleChange, handleSubmit }) => (
+        {({ errors, values, touched, setFieldValue, handleBlur, handleChange, handleSubmit }) => (
           <form onSubmit={handleSubmit}>
             <Grid container>
               <Grid item xs={12}>
@@ -85,53 +104,12 @@ const Typography = () => {
               </Grid>
 
               <Grid item xs={12}>
-                {/* <FieldArray name="images">
-                  {({ push, remove }) => (
-                    <Box>
-                      {values.images.map((_, index) => (
-                        <FormControl fullWidth margin="normal" key={index}>
-                  
-                          <OutlinedInput
-                            id={`images[${index}]`}
-                            type="file"
-                            name={`images[${index}]`}
-                            onBlur={handleBlur}
-                            onChange={(event) => {
-                              const file = event.currentTarget.files[0];
-                              const fileReader = new FileReader();
-                              fileReader.onload = () => {
-                                values.images[index] = fileReader.result;
-                                handleChange(event);
-                              };
-                              fileReader.readAsDataURL(file);
-                            }}
-                            label={`Image ${index + 1}`}
-                          />
-                          <IconButton onClick={() => remove(index)}>
-                            <DeleteIcon />
-                          </IconButton>
-                          {touched.images && errors.images && (
-                            <FormHelperText error id={`helper-text-images-${index}`}>
-                              {errors.images[index]}
-                            </FormHelperText>
-                          )}
-                        </FormControl>
-                      ))}
-                      <Button
-                        variant="contained"
-                        color="primary"
-                        onClick={() => push('')}
-                        startIcon={<AddIcon />}
-                      >
-                        Add Image
-                      </Button>
-                    </Box>
-                  )}
-                </FieldArray> */}
                 <FormControl fullWidth margin="normal">
-                  {/* <InputLabel htmlFor={`images[${index}]`}>Image {index + 1}</InputLabel> */}
-                  <input type="file" onChange={(e) => setFieldValue("images", e.target.files)} multiple />
-            
+                  <input
+                    type="file"
+                    onChange={(e) => setFieldValue("images", e.target.files)}
+                    multiple
+                  />
                 </FormControl>
               </Grid>
 
@@ -170,7 +148,7 @@ const Typography = () => {
                 )}
               </FormControl>
               <FormControl fullWidth margin="normal">
-                <InputLabel htmlFor="street">Area</InputLabel>
+                <InputLabel htmlFor="area">Area</InputLabel>
                 <OutlinedInput
                   id="area"
                   type="text"
@@ -259,9 +237,8 @@ const Typography = () => {
                 )}
               </FormControl>
 
-
               <FormControl fullWidth margin="normal">
-                <InputLabel htmlFor="country">morningPrice</InputLabel>
+                <InputLabel htmlFor="morningPrice">Morning Price</InputLabel>
                 <OutlinedInput
                   id="morningPrice"
                   type="text"
@@ -269,18 +246,17 @@ const Typography = () => {
                   name="morningPrice"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  label="morningPrice"
+                  label="Morning Price"
                 />
                 {touched.morningPrice && errors.morningPrice && (
-                  <FormHelperText error id="helper-text-country">
+                  <FormHelperText error id="helper-text-morningPrice">
                     {errors.morningPrice}
                   </FormHelperText>
                 )}
               </FormControl>
 
-
               <FormControl fullWidth margin="normal">
-                <InputLabel htmlFor="country">nightPrice</InputLabel>
+                <InputLabel htmlFor="nightPrice">Night Price</InputLabel>
                 <OutlinedInput
                   id="nightPrice"
                   type="text"
@@ -288,10 +264,10 @@ const Typography = () => {
                   name="nightPrice"
                   onBlur={handleBlur}
                   onChange={handleChange}
-                  label="nightPrice"
+                  label="Night Price"
                 />
                 {touched.nightPrice && errors.nightPrice && (
-                  <FormHelperText error id="helper-text-country">
+                  <FormHelperText error id="helper-text-nightPrice">
                     {errors.nightPrice}
                   </FormHelperText>
                 )}
@@ -304,14 +280,17 @@ const Typography = () => {
           </form>
         )}
       </Formik>
+      <Box sx={{ width: 500 }}>
+        <Snackbar
+          anchorOrigin={{ vertical, horizontal }}
+          open={snackbarOpen}
+          onClose={handleClose}
+          message={error ? `${error}` : 'Box added successfully!'}
+          key={vertical + horizontal}
+        />
+      </Box>
     </MainCard>
-  )
+  );
 };
 
 export default Typography;
-
-
-
-
-
-

@@ -36,10 +36,12 @@ import User1 from 'assets/images/users/user-round.svg';
 
 // assets
 import { IconLogout, IconSearch, IconSettings, IconUser } from '@tabler/icons-react';
+import axios from 'axios';
 
 // ==============================|| PROFILE MENU ||============================== //
 
 const ProfileSection = () => {
+  var token = localStorage.getItem('auth')
   const theme = useTheme();
   const customization = useSelector((state) => state.customization);
   const navigate = useNavigate();
@@ -86,6 +88,26 @@ const ProfileSection = () => {
 
     prevOpen.current = open;
   }, [open]);
+
+  useEffect(()=>{
+    OwnerData()
+  },[])
+  const [ownerData , setOwnerData] = useState()
+
+  const OwnerData = () => {
+    axios.get(`http://localhost:3000/getOwnerbyid` , {
+      headers:{
+        auth : token
+      }
+    })
+    .then((res)=>{
+      console.log(res.data.data);
+      setOwnerData(res.data.data)
+    })
+    .catch((err)=>{
+      console.log(err);
+    })
+  }
 
   return (
     <>
@@ -159,7 +181,7 @@ const ProfileSection = () => {
                       <Stack direction="row" spacing={0.5} alignItems="center">
                         <Typography variant="h4">Good Morning,</Typography>
                         <Typography component="span" variant="h4" sx={{ fontWeight: 400 }}>
-                          Johne Doe
+                          {ownerData.ownerName}
                         </Typography>
                       </Stack>
                       <Typography variant="subtitle2">Project Admin</Typography>
