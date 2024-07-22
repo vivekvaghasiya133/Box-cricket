@@ -61,20 +61,20 @@ const Typography = () => {
           formValues.append("morningPrice", values.morningPrice);
           formValues.append("nightPrice", values.nightPrice);
           
-          axios.post('http://localhost:3000/addbox', formValues, {
+          axios.post('https://box-cricket-api.onrender.com/addbox', formValues, {
             headers: {
               auth: token,
               "Content-Type": "multipart/form-data"
             }
           })
             .then((res) => {
-              // console.log(res);
+              console.log(res);
               resetForm();
               setError(null); // Clear the error if submission is successful
               setSnackbarOpen(true); // Show success message
             })
             .catch((err) => {
-              // console.log(err.response.data, "Error");
+              console.log(err, "Error");
               setError(err.response.data.message);
               setSnackbarOpen(true); // Open Snackbar on error
             });
