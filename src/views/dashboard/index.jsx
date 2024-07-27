@@ -35,6 +35,8 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import axios from 'axios';
 import { styled } from '@mui/material/styles';
+import { FaRegEye } from "react-icons/fa";
+import { useNavigate } from 'react-router-dom';
 // import { makeStyles } from '@mui/styles';
 const GreenDiv = styled('div')(({ theme }) => ({
   width: '5px',
@@ -56,6 +58,7 @@ const Dashboard = () => {
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const [id , setId] = useState(null)
   const [current , setCurrent] = useState({})
+  const navigate  =useNavigate()
   const handleClickOpen = (box) => {
     // console.log(box);
     setOpen(true);
@@ -169,7 +172,8 @@ const Dashboard = () => {
                             {el.status}
                           </Box>
                         </TableCell>
-                        <TableCell align="right">
+                        <TableCell align="right" width={'300px'}>
+                          <Button onClick={() => navigate(`/utils/box-show/${el._id}`)} ><FaRegEye /></Button>
                           <Button onClick={() => handleDelete(el._id)}>Delete</Button>
                           <Button onClick={() => handleClickOpen(el)}>Edit</Button>
                         </TableCell>
