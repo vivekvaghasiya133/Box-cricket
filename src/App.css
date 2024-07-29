@@ -7,3 +7,12 @@
 .css-y8dwi2-MuiSwitch-root {
     margin: 0 !important;
 }
+#table1 {
+    border-collapse: collapse;
+}
+
+#table1 td,
+#table1 th {
+    border: 1px solid #e6e6e6;
+    padding: 10px;
+}
