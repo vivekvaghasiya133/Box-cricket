@@ -66,7 +66,7 @@ const AuthRegister = ({ ...others }) => {
   };
 
   // useEffect(() => {
-  //   axios.post(`https://box-cricket-api.onrender.com/owner`)
+  //   axios.post(`http://localhost:3000/owner`)
   //     .then((res) => {
   //       console.log(res, "Rsponse");
   //     })
@@ -275,7 +275,7 @@ const AuthRegister = ({ ...others }) => {
           password: Yup.string().max(255).required('Password is required')
         })}
         onSubmit={(values, { setSubmitting, setErrors }) => {
-          axios.post('https://box-cricket-api.onrender.com/owner', values)
+          axios.post('http://localhost:3000/owner', values)
             .then((response) => {
               // console.log(response.data);
               navigate('/pages/login/login3')
