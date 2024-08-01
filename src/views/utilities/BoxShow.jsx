@@ -78,7 +78,7 @@ function BoxShow() {
     }, [])
 
     const getOrder = () => {
-        axios.get(`http://localhost:3000/getorderbybox/${id}`)
+        axios.get(`https://box-cricket-api.onrender.com/getorderbybox/${id}`)
         .then((res)=>{
             console.log(res.data.data);
             setOrder(res.data.data)
@@ -90,7 +90,7 @@ function BoxShow() {
 
     const getSlot = async () => {
         try {
-            const res = await axios.get(`http://localhost:3000/getshifts/${id}`);
+            const res = await axios.get(`https://box-cricket-api.onrender.com/getshifts/${id}`);
             setBox([res.data.data])
             const morningShifts = res.data.data.opning.morning;
             const nightShifts = res.data.data.opning.night;
@@ -109,7 +109,7 @@ function BoxShow() {
 
         let value = { shiftType: shift, timeSlots: [time], newValue: checked }
 
-        axios.post(`http://localhost:3000/bookshift/${id}`, value)
+        axios.post(`https://box-cricket-api.onrender.com/bookshift/${id}`, value)
             .then((res) => {
                 console.log(res);
             })
