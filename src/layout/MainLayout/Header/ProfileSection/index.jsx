@@ -95,7 +95,7 @@ const ProfileSection = () => {
   const [ownerData , setOwnerData] = useState()
 
   const OwnerData = () => {
-    axios.get(`https://box-cricket-api.onrender.com/getOwnerbyid` , {
+    axios.get(`http://localhost:3000/getOwnerbyid` , {
       headers:{
         auth : token
       }
